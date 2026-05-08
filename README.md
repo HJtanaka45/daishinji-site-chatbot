@@ -1,36 +1,173 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 大信寺AI案内チャットボット
 
-## Getting Started
+大信寺WEB本体とは完全に分離して開発する、iframe埋め込み用のチャットボット専用アプリです。
 
-First, run the development server:
+このプロジェクトは、大信寺WEBサイト本体のリポジトリ内で開発しません。大信寺WEB本体をVercelへデプロイする用途にも使いません。WEB本体側へ入れるものは、最終的にiframeなどの埋め込みコードだけです。
+
+## プロジェクト概要
+
+- プロジェクト名: `daishinji-site-chatbot`
+- 目的: 大信寺WEB本体とは分離されたチャット画面とチャットAPIを提供する
+- 現在の段階: 最小チャットUIと仮応答API
+- 未実装: OpenAI接続、Supabase接続、embedding、pgvector、RAG、自動クロール、管理画面、定期更新処理
+
+## 大信寺WEB本体との分離方針
+
+このアプリは、大信寺WEB本体とは別の専用プロジェクトとして管理します。
+
+禁止事項:
+
+- 大信寺WEB本体リポジトリ内でチャットボット本体を開発しない
+- 大信寺WEB本体のファイルを変更しない
+- 大信寺WEB本体をVercelへデプロイしない
+- 大信寺WEB本体にOpenAI、Supabase、RAG処理を作り込まない
+- 大信寺WEB本体でenvやAPIキーを管理しない
+
+## セットアップ方法
+
+```bash
+npm install
+```
+
+## 起動方法
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+起動後、以下を開きます。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```txt
+http://localhost:3000/chat-embed
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 環境変数
 
-## Learn More
+`.env.example` には必要になる可能性がある変数名だけを記載します。実値は絶対に書きません。
 
-To learn more about Next.js, take a look at the following resources:
+```txt
+OPENAI_API_KEY=
+SUPABASE_URL=
+SUPABASE_ANON_KEY=
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+注意事項:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `.env` はGit管理しない
+- `.env.local` はGit管理しない
+- `.env.example` に本物の値を書かない
+- Service Role Keyをクライアント側へ出さない
+- 秘密情報を `NEXT_PUBLIC_` に入れない
+- APIキーをコード、README、docs、チャットに貼らない
 
-## Deploy on Vercel
+## `/chat-embed` の説明
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+iframe埋め込み用の独立したチャット画面です。
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+現在の機能:
+
+- チャットメッセージ表示
+- 入力欄
+- 送信ボタン
+- ローディング表示
+- エラー表示
+- スマホ対応
+- PC対応
+- iframe内で崩れにくい全画面レイアウト
+- 大信寺サイトに合う落ち着いた配色
+
+この段階ではOpenAI接続は行っていません。
+
+## `/api/chat` の説明
+
+チャットUIからPOSTリクエストを受け取り、仮応答を返すAPIです。
+
+リクエスト例:
+
+```json
+{
+  "message": "納骨堂について教えてください"
+}
+```
+
+レスポンス例:
+
+```json
+{
+  "answer": "現在、案内情報を準備中です。詳しくは大信寺までお問い合わせください。"
+}
+```
+
+入力が空の場合はエラーレスポンスを返します。
+
+## iframe埋め込み方法
+
+大信寺WEB本体側では、チャットボット本体を直接実装せず、専用アプリのURLをiframeで読み込みます。
+
+```html
+<iframe
+  src="https://example.com/chat-embed"
+  title="大信寺AI案内チャット"
+  style="width: 100%; height: 640px; border: 0;"
+  loading="lazy"
+></iframe>
+```
+
+本番URLが決まったら、`src` をチャットボット専用アプリのURLに変更します。
+
+## セキュリティ注意事項
+
+- `.env` をコミットしない
+- `.vercel` をGit管理しない
+- APIキーをコードに直接書かない
+- APIキーをREADMEやdocsに書かない
+- APIキーをチャットに貼らない
+- `NEXT_PUBLIC_` に秘密情報を入れない
+- Supabase Service Role Keyをクライアント側へ絶対に出さない
+- `git add .` を使わない
+- 確認なしに `git push` しない
+
+## 回答制御の基本方針
+
+このチャットボットは雑談AIではありません。大信寺サイトに掲載されている情報をもとに、参拝者・利用者へ正確に案内するためのAI案内チャットボットです。
+
+回答してよい内容:
+
+- 大信寺サイトに掲載されている内容
+- 墓苑に関する掲載情報
+- 樹木葬に関する掲載情報
+- 納骨堂に関する掲載情報
+- 合葬墓に関する掲載情報
+- アクセス情報
+- 問い合わせ方法
+- サイト内に明示されている費用・条件
+
+回答してはいけない内容:
+
+- サイトにない費用
+- サイトにない供養内容
+- サイトにない宗派条件
+- サイトにない納骨条件
+- サイトにない法要内容
+- 一般論による補完
+- 他寺院の情報
+- AIの推測
+- OpenAIの一般知識による断定
+- 雑談目的の自由回答
+
+サイト内情報で判断できない場合は、必ず以下のように返します。
+
+```txt
+申し訳ありません。その内容については現在ご案内できる情報がありません。詳しくは直接お問い合わせください。
+```
+
+## 今回まだ実装しないもの
+
+- OpenAI接続
+- Supabase接続
+- embedding
+- pgvector
+- RAG
+- 自動クロール
+- 管理画面
+- 定期更新処理
