@@ -3,85 +3,167 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>大信寺AI案内チャットボット iframe確認</title>
+    <title>大信寺AI案内チャットボット 右下固定iframe確認</title>
     <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
       body {
         margin: 0;
-        padding: 40px 16px;
+        min-height: 100vh;
+        overflow-x: hidden;
         background: #f5f1e8;
         font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       }
 
-      .preview-wrapper {
+      .preview-page {
         max-width: 1080px;
         margin: 0 auto;
+        padding: 56px 16px 160px;
       }
 
-      .preview-heading {
-        max-width: 960px;
-        margin: 0 auto 24px;
+      .preview-card {
+        background: #fffaf2;
+        border-radius: 20px;
+        padding: 32px;
+        box-shadow: 0 10px 32px rgba(0, 0, 0, 0.08);
+        min-width: 0;
+        overflow-wrap: anywhere;
+        word-break: break-word;
       }
 
-      .preview-heading h1 {
-        margin: 0 0 8px;
-        font-size: 24px;
+      .preview-card h1 {
+        margin: 0 0 12px;
+        font-size: 28px;
+        line-height: 1.45;
+        overflow-wrap: anywhere;
       }
 
-      .preview-heading p {
-        margin: 0;
+      .preview-card p {
+        margin: 0 0 16px;
+        line-height: 1.8;
         color: #555;
       }
 
-      .daishinji-chatbot-embed {
-        width: 100%;
-        max-width: 960px;
-        height: 720px;
-        margin: 0 auto;
+      .dummy-section {
+        margin-top: 24px;
+        padding: 24px;
+        border-radius: 16px;
+        background: #ffffff;
+        min-width: 0;
       }
 
-      .daishinji-chatbot-embed iframe {
+      .daishinji-chatbot-button {
+        position: fixed;
+        right: 24px;
+        bottom: 24px;
+        z-index: 10000;
+        border: 0;
+        border-radius: 999px;
+        padding: 14px 20px;
+        background: #6b4f2a;
+        color: #fff;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.24);
+      }
+
+      .daishinji-chatbot-panel {
+        position: fixed;
+        right: 24px;
+        bottom: 84px;
+        width: 380px;
+        height: 620px;
+        max-width: calc(100vw - 32px);
+        max-height: calc(100vh - 110px);
+        z-index: 9999;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.22);
+        background: #fffaf2;
+        display: none;
+      }
+
+      .daishinji-chatbot-panel.is-open {
+        display: block;
+      }
+
+      .daishinji-chatbot-panel iframe {
         width: 100%;
         height: 100%;
         border: 0;
-        border-radius: 16px;
-        overflow: hidden;
-        background: #fffaf2;
+        display: block;
       }
 
       @media (max-width: 768px) {
-        body {
-          padding: 0;
+        .preview-page {
+          padding: 32px 12px 140px;
         }
 
-        .preview-heading {
-          display: none;
+        .preview-card {
+          padding: 24px;
         }
 
-        .daishinji-chatbot-embed {
-          height: 100vh;
-          max-width: none;
+        .preview-card h1 {
+          font-size: 22px;
         }
 
-        .daishinji-chatbot-embed iframe {
-          border-radius: 0;
+        .daishinji-chatbot-button {
+          right: 16px;
+          bottom: 16px;
+        }
+
+        .daishinji-chatbot-panel {
+          right: 12px;
+          bottom: 76px;
+          width: calc(100vw - 24px);
+          height: 72vh;
+          border-radius: 16px;
         }
       }
     </style>
   </head>
   <body>
-    <main class="preview-wrapper">
-      <section class="preview-heading">
-        <h1>大信寺AI案内チャットボット iframe確認</h1>
-        <p>大信寺WEB本体へ埋め込む前に、iframe表示のみを確認するためのページです。</p>
-      </section>
+    <main class="preview-page">
+      <section class="preview-card">
+        <h1>大信寺AI案内チャットボット 右下固定iframe確認</h1>
+        <p>
+          大信寺WEB本体へ埋め込む前に、右下固定のiframe表示だけを確認するためのページです。
+        </p>
+        <p>
+          右下の「AI案内」ボタンを押すと、チャットボットのiframeが開きます。
+        </p>
 
-      <div class="daishinji-chatbot-embed">
-        <iframe
-          src="https://daishinji-ai-chatbot.vercel.app/chat-embed"
-          title="大信寺AI案内チャットボット"
-          loading="lazy"
-        ></iframe>
-      </div>
+        <section class="dummy-section">
+          <h2>確認用の仮コンテンツ</h2>
+          <p>
+            実際の大信寺WEB本体を変更せず、ページ右下にチャットボットが重なって表示されるかを確認します。
+          </p>
+        </section>
+      </section>
     </main>
+
+    <button class="daishinji-chatbot-button" onclick="toggleDaishinjiChatbot()">
+      AI案内
+    </button>
+
+    <div id="daishinji-chatbot-panel" class="daishinji-chatbot-panel">
+      <iframe
+        src="https://daishinji-ai-chatbot.vercel.app/chat-embed"
+        title="大信寺AI案内チャットボット"
+        loading="lazy"
+      ></iframe>
+    </div>
+
+    <script>
+      function toggleDaishinjiChatbot() {
+        const panel = document.getElementById("daishinji-chatbot-panel");
+        panel.classList.toggle("is-open");
+      }
+    </script>
   </body>
 </html>

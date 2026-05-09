@@ -64,6 +64,97 @@ https://daishinji-ai-chatbot.vercel.app/chat-embed
 </style>
 ```
 
+## 右下固定で表示する場合
+
+大信寺WEB本体の右下にチャットボットを固定表示する場合は、以下のコードを使用します。
+
+PCでは右下にチャットパネルを表示し、スマホでは画面幅に合わせて表示します。最初から大きく表示するより、開閉ボタン付きにして、利用者が必要なときだけ開ける形がおすすめです。
+
+大信寺WEB本体側で触るのは、このiframe埋め込みコードのみです。チャットUIやAPI本体は、チャットボット専用アプリ側で管理します。
+
+今回の整理では、OpenAI / Supabase / RAG は未対応です。また、iframe埋め込み確認に環境変数は不要です。
+
+```html
+<button class="daishinji-chatbot-button" onclick="toggleDaishinjiChatbot()">
+  AI案内
+</button>
+
+<div id="daishinji-chatbot-panel" class="daishinji-chatbot-panel">
+  <iframe
+    src="https://daishinji-ai-chatbot.vercel.app/chat-embed"
+    title="大信寺AI案内チャットボット"
+    loading="lazy"
+  ></iframe>
+</div>
+
+<style>
+  .daishinji-chatbot-button {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 10000;
+    border: 0;
+    border-radius: 999px;
+    padding: 14px 20px;
+    background: #6b4f2a;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.24);
+  }
+
+  .daishinji-chatbot-panel {
+    position: fixed;
+    right: 24px;
+    bottom: 84px;
+    width: 380px;
+    height: 620px;
+    max-width: calc(100vw - 32px);
+    max-height: calc(100vh - 110px);
+    z-index: 9999;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.22);
+    background: #fffaf2;
+    display: none;
+  }
+
+  .daishinji-chatbot-panel.is-open {
+    display: block;
+  }
+
+  .daishinji-chatbot-panel iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+  }
+
+  @media (max-width: 768px) {
+    .daishinji-chatbot-button {
+      right: 16px;
+      bottom: 16px;
+    }
+
+    .daishinji-chatbot-panel {
+      right: 12px;
+      bottom: 76px;
+      width: calc(100vw - 24px);
+      height: 72vh;
+      border-radius: 16px;
+    }
+  }
+</style>
+
+<script>
+  function toggleDaishinjiChatbot() {
+    const panel = document.getElementById("daishinji-chatbot-panel");
+    panel.classList.toggle("is-open");
+  }
+</script>
+```
+
 ## 表示確認項目
 
 - `docs/iframe-preview.html` をブラウザで開けること
