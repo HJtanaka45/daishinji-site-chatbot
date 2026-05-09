@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>大信寺AI案内チャットボット iframe表示確認</title>
+    <title>大信寺AI案内チャットボット iframe確認</title>
     <style>
       body {
         margin: 0;
@@ -15,6 +15,21 @@
       .preview-wrapper {
         max-width: 1080px;
         margin: 0 auto;
+      }
+
+      .preview-heading {
+        max-width: 960px;
+        margin: 0 auto 24px;
+      }
+
+      .preview-heading h1 {
+        margin: 0 0 8px;
+        font-size: 24px;
+      }
+
+      .preview-heading p {
+        margin: 0;
+        color: #555;
       }
 
       .daishinji-chatbot-embed {
@@ -38,6 +53,10 @@
           padding: 0;
         }
 
+        .preview-heading {
+          display: none;
+        }
+
         .daishinji-chatbot-embed {
           height: 100vh;
           max-width: none;
@@ -51,6 +70,11 @@
   </head>
   <body>
     <main class="preview-wrapper">
+      <section class="preview-heading">
+        <h1>大信寺AI案内チャットボット iframe確認</h1>
+        <p>大信寺WEB本体へ埋め込む前に、iframe表示のみを確認するためのページです。</p>
+      </section>
+
       <div class="daishinji-chatbot-embed">
         <iframe
           src="https://daishinji-ai-chatbot.vercel.app/chat-embed"
