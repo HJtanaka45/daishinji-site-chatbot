@@ -20,7 +20,7 @@ const initialMessages: ChatMessage[] = [
     id: "initial-assistant-message",
     role: "assistant",
     content:
-      "大信寺についてご質問ください。現在は準備中のため、詳しい内容は直接お問い合わせください。",
+      "大信寺サイトに掲載されている内容をもとにご案内します。分からない内容は直接お問い合わせください。",
   },
 ];
 
@@ -74,7 +74,7 @@ export default function ChatEmbedClient() {
         role: "assistant",
         content:
           data.answer ??
-          "現在、案内情報を準備中です。詳しくは大信寺までお問い合わせください。",
+          "申し訳ありません。その内容については現在ご案内できる情報がありません。詳しくは直接お問い合わせください。",
       };
 
       setMessages((currentMessages) => [...currentMessages, assistantMessage]);
@@ -145,7 +145,7 @@ export default function ChatEmbedClient() {
             </button>
           </form>
           <p className="notice-text">
-            現在は案内情報を準備中です。詳しくは大信寺までお問い合わせください。
+            サイト掲載情報をもとにご案内します。不明な内容は直接お問い合わせください。
           </p>
         </footer>
       </section>

@@ -1,11 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
+import { answerChatMessage } from "../../../lib/answerChat";
 
 type ChatRequestBody = {
   message?: unknown;
 };
-
-const fallbackAnswer =
-  "現在、案内情報を準備中です。詳しくは大信寺までお問い合わせください。";
 
 export async function POST(request: NextRequest) {
   try {
@@ -18,7 +16,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    return NextResponse.json({ answer: fallbackAnswer });
+    return NextResponse.json({ answer: answerChatMessage(body.message) });
   } catch {
     return NextResponse.json(
       { error: "リクエスト形式が正しくありません。" },
