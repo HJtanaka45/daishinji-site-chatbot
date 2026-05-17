@@ -15,6 +15,27 @@ export const ritualConsultationAnswer =
 export const feeInquiryAnswer =
   "費用については、墓苑・納骨方法・ご相談内容によって異なります。詳しい費用や条件については、大信寺へ直接お問い合わせください。";
 
+export const visitConsultationAnswer =
+  "お参り・ご見学・ご相談については、日時や内容によって個別の確認が必要です。詳しくは大信寺へ直接お問い合わせください。";
+
+/** 見学・相談・予約・お参りの問い合わせ意図 */
+export const visitIntentKeywords = [
+  "見学",
+  "見に行きたい",
+  "見たい",
+  "相談",
+  "相談したい",
+  "予約",
+  "予約したい",
+  "お参り",
+  "参拝",
+  "お墓参り",
+  "墓参り",
+  "行ってもいい",
+  "伺いたい",
+  "訪問",
+];
+
 /** 費用・料金の問い合わせ意図（金額は案内せず問い合わせへ誘導） */
 export const feeIntentKeywords = [
   "費用",

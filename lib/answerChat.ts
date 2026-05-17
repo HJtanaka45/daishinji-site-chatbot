@@ -9,6 +9,8 @@ import {
   ritualConsultationKeywords,
   ritualConsultationPhrases,
   unknownAnswer,
+  visitConsultationAnswer,
+  visitIntentKeywords,
 } from "./daishinjiKnowledge";
 
 const minimumKeywordScore = 1;
@@ -74,6 +76,10 @@ function includesRitualConsultationIntent(message: string): boolean {
   return ritualConsultationPhrases.some((phrase) => message.includes(normalizeText(phrase)));
 }
 
+function includesVisitConsultationIntent(message: string): boolean {
+  return visitIntentKeywords.some((keyword) => message.includes(normalizeText(keyword)));
+}
+
 function findBestKnowledgeMatch(
   message: string,
   entries: KnowledgeEntry[],
@@ -133,6 +139,10 @@ export function answerChatMessage(message: string): string {
     return ritualConsultationAnswer;
   }
 
+  if (includesVisitConsultationIntent(normalizedMessage)) {
+    return visitConsultationAnswer;
+  }
+
   if (includesLocationIntent(normalizedMessage)) {
     const addressEntry = daishinjiKnowledge.find((entry) => entry.id === "daishinji-address");
     if (addressEntry) {
@@ -145,4 +155,9 @@ export function answerChatMessage(message: string): string {
   return bestMatch?.answer ?? unknownAnswer;
 }
 
-export { feeInquiryAnswer, ritualConsultationAnswer, unknownAnswer };
+export {
+  feeInquiryAnswer,
+  ritualConsultationAnswer,
+  unknownAnswer,
+  visitConsultationAnswer,
+};
