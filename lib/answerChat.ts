@@ -1,4 +1,9 @@
-import { daishinjiKnowledge, unknownAnswer } from "./daishinjiKnowledge";
+import {
+  daishinjiKnowledge,
+  ritualConsultationAnswer,
+  ritualConsultationKeywords,
+  unknownAnswer,
+} from "./daishinjiKnowledge";
 
 const minimumKeywordScore = 1;
 
@@ -45,6 +50,26 @@ function includesAnyBlockedKeyword(message: string): boolean {
   return blockedKeywords.some((keyword) => message.includes(normalizeText(keyword)));
 }
 
+function includesRitualConsultationIntent(message: string): boolean {
+  return ritualConsultationKeywords.some((keyword) =>
+    message.includes(normalizeText(keyword)),
+  );
+}
+
+const locationIntentKeywords = [
+  "何処",
+  "どこ",
+  "何所",
+  "住所",
+  "所在地",
+  "アクセス",
+  "行き方",
+];
+
+function includesLocationIntent(message: string): boolean {
+  return locationIntentKeywords.some((keyword) => message.includes(normalizeText(keyword)));
+}
+
 export function answerChatMessage(message: string): string {
   const normalizedMessage = normalizeText(message);
 
@@ -54,6 +79,17 @@ export function answerChatMessage(message: string): string {
 
   if (includesAnyBlockedKeyword(normalizedMessage)) {
     return unknownAnswer;
+  }
+
+  if (includesRitualConsultationIntent(normalizedMessage)) {
+    return ritualConsultationAnswer;
+  }
+
+  if (includesLocationIntent(normalizedMessage)) {
+    const addressEntry = daishinjiKnowledge.find((entry) => entry.id === "daishinji-address");
+    if (addressEntry) {
+      return addressEntry.answer;
+    }
   }
 
   const bestMatch = daishinjiKnowledge
@@ -70,4 +106,4 @@ export function answerChatMessage(message: string): string {
   return bestMatch?.entry.answer ?? unknownAnswer;
 }
 
-export { unknownAnswer };
+export { ritualConsultationAnswer, unknownAnswer };

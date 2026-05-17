@@ -9,6 +9,25 @@ export type KnowledgeEntry = {
 export const unknownAnswer =
   "申し訳ありません。その内容については現在ご案内できる情報がありません。詳しくは直接お問い合わせください。";
 
+export const ritualConsultationAnswer =
+  "法要や供養のご相談については、内容や日時によって個別の確認が必要です。詳しくは大信寺へ直接お問い合わせください。";
+
+export const ritualConsultationKeywords = [
+  "法要",
+  "供養",
+  "読経",
+  "お経",
+  "お参り",
+  "お勤め",
+  "お願い",
+  "依頼",
+  "命日",
+  "年忌",
+  "一周忌",
+  "三回忌",
+  "四十九日",
+];
+
 export const daishinjiKnowledge: KnowledgeEntry[] = [
   {
     id: "about-daishinji",
@@ -16,6 +35,25 @@ export const daishinjiKnowledge: KnowledgeEntry[] = [
     keywords: ["大信寺", "だいしんじ", "寺", "お寺", "浄土真宗", "真宗", "親鸞", "聖貫山"],
     answer:
       "大信寺は、広島県広島市安芸区中野東にある、親鸞聖人を宗祖と仰ぐ真宗（浄土真宗）のお寺です。公式サイトでは、親鸞聖人のみ教えを共に聴かせていただく場として案内されています。",
+    sourceUrl: "https://daishinji-tp.com/",
+  },
+  {
+    id: "daishinji-address",
+    title: "大信寺の所在地・アクセス",
+    keywords: [
+      "何処",
+      "どこ",
+      "何所",
+      "住所",
+      "所在地",
+      "アクセス",
+      "行き方",
+      "場所",
+      "大信寺",
+      "お寺",
+    ],
+    answer:
+      "大信寺は、広島県広島市安芸区中野東にございます。公式サイトでは、JR安芸中野駅より徒歩8分ほど、駐車場ありとも案内されています。詳しいアクセスは直接お問い合わせください。",
     sourceUrl: "https://daishinji-tp.com/",
   },
   {
