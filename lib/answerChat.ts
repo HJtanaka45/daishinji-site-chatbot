@@ -1,4 +1,6 @@
 import {
+  cemeteryEligibilityContextHints,
+  cemeteryEligibilityIntentKeywords,
   daishinjiKnowledge,
   type KnowledgeEntry,
   feeInquiryAnswer,
@@ -8,6 +10,8 @@ import {
   ritualConsultationAnswer,
   ritualConsultationKeywords,
   ritualConsultationPhrases,
+  treeBurialInquiryAnswer,
+  treeBurialIntentKeywords,
   unknownAnswer,
   visitConsultationAnswer,
   visitIntentKeywords,
@@ -62,6 +66,28 @@ function includesOssuaryIntent(message: string): boolean {
   return ossuaryIntentKeywords.some((keyword) => message.includes(normalizeText(keyword)));
 }
 
+function includesCemeteryEligibilityIntent(message: string): boolean {
+  const hasTopic = cemeteryEligibilityIntentKeywords.some((keyword) =>
+    message.includes(normalizeText(keyword)),
+  );
+  if (!hasTopic) {
+    return false;
+  }
+
+  if (
+    message.includes(normalizeText("浄土真宗")) &&
+    !cemeteryEligibilityContextHints.some((hint) => message.includes(normalizeText(hint)))
+  ) {
+    return false;
+  }
+
+  return true;
+}
+
+function includesTreeBurialIntent(message: string): boolean {
+  return treeBurialIntentKeywords.some((keyword) => message.includes(normalizeText(keyword)));
+}
+
 function includesRitualConsultationIntent(message: string): boolean {
   if (includesOssuaryIntent(message)) {
     return false;
@@ -104,6 +130,11 @@ const locationIntentKeywords = [
   "所在地",
   "アクセス",
   "行き方",
+  "駅",
+  "安芸中野駅",
+  "徒歩",
+  "近い",
+  "近く",
 ];
 
 function includesLocationIntent(message: string): boolean {
@@ -133,6 +164,17 @@ export function answerChatMessage(message: string): string {
     if (ossuaryMatch) {
       return ossuaryMatch.answer;
     }
+  }
+
+  if (includesCemeteryEligibilityIntent(normalizedMessage)) {
+    const cemeteryEntry = daishinjiKnowledge.find((entry) => entry.id === "cemetery");
+    if (cemeteryEntry) {
+      return cemeteryEntry.answer;
+    }
+  }
+
+  if (includesTreeBurialIntent(normalizedMessage)) {
+    return treeBurialInquiryAnswer;
   }
 
   if (includesRitualConsultationIntent(normalizedMessage)) {

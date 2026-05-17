@@ -87,6 +87,34 @@ export const ossuaryIntentKeywords = [
 
 export const ossuaryKnowledgeIds = ["cemetery", "renjudo"] as const;
 
+/** 樹木葬（公式サイト daishinji-tp.com に詳細ページ未掲載のため問い合わせへ誘導） */
+export const treeBurialInquiryAnswer =
+  "樹木葬については、掲載情報の確認が必要です。詳しくは大信寺へ直接お問い合わせください。";
+
+export const treeBurialIntentKeywords = ["樹木葬", "樹木", "自然葬", "往還"];
+
+/** 墓苑の利用条件（宗派・檀家・勧誘・寄付など） */
+export const cemeteryEligibilityIntentKeywords = [
+  "宗派",
+  "宗教",
+  "門信徒",
+  "檀家",
+  "檀家にな",
+  "門徒",
+  "勧誘",
+  "寄付",
+];
+
+export const cemeteryEligibilityContextHints = [
+  "関係",
+  "必要",
+  "利用",
+  "墓苑",
+  "納骨",
+  "墓",
+  "お墓",
+];
+
 export const daishinjiKnowledge: KnowledgeEntry[] = [
   {
     id: "about-daishinji",
@@ -110,6 +138,11 @@ export const daishinjiKnowledge: KnowledgeEntry[] = [
       "場所",
       "大信寺",
       "お寺",
+      "駅",
+      "安芸中野駅",
+      "徒歩",
+      "近い",
+      "近く",
     ],
     answer:
       "大信寺は、広島県広島市安芸区中野東にございます。公式サイトでは、JR安芸中野駅より徒歩8分ほど、駐車場ありとも案内されています。詳しいアクセスは直接お問い合わせください。",
@@ -133,6 +166,15 @@ export const daishinjiKnowledge: KnowledgeEntry[] = [
       "骨壺",
       "預けたい",
       "永代供養",
+      "宗派",
+      "宗教",
+      "門信徒",
+      "檀家",
+      "門徒",
+      "勧誘",
+      "寄付",
+      "利用",
+      "必要",
     ],
     answer:
       "大信寺墓苑は、大信寺が管理している墓苑です。公式サイトでは、永代納骨墓を備えており、門信徒に関わらず利用できること、勧誘や寄付などの要求は一切ないことが案内されています。詳しい内容は直接お問い合わせください。",
@@ -166,7 +208,20 @@ export const daishinjiKnowledge: KnowledgeEntry[] = [
   {
     id: "cemetery-access",
     title: "大信寺墓苑の所在地・アクセス",
-    keywords: ["アクセス", "行き方", "場所", "所在地", "住所", "駐車場", "安芸中野駅", "jr"],
+    keywords: [
+      "アクセス",
+      "行き方",
+      "場所",
+      "所在地",
+      "住所",
+      "駐車場",
+      "安芸中野駅",
+      "jr",
+      "駅",
+      "徒歩",
+      "近い",
+      "近く",
+    ],
     answer:
       "公式サイトでは、大信寺墓苑の所在地は広島県広島市安芸区中野、JR安芸中野駅より徒歩8分、車でも2分ほどで到着する場所と案内されています。駐車場ありとも掲載されています。",
     sourceUrl: "https://daishinji-tp.com/daishinjiboen.html",
