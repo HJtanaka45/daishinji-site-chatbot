@@ -1,6 +1,8 @@
 import {
   daishinjiKnowledge,
   type KnowledgeEntry,
+  feeInquiryAnswer,
+  feeIntentKeywords,
   ossuaryIntentKeywords,
   ossuaryKnowledgeIds,
   ritualConsultationAnswer,
@@ -12,11 +14,7 @@ import {
 const minimumKeywordScore = 1;
 
 const blockedKeywords = [
-  "料金",
-  "費用",
-  "価格",
   "値段",
-  "いくら",
   "全部",
   "総額",
   "宗派の条件",
@@ -52,6 +50,10 @@ function normalizeText(value: string): string {
 
 function includesAnyBlockedKeyword(message: string): boolean {
   return blockedKeywords.some((keyword) => message.includes(normalizeText(keyword)));
+}
+
+function includesFeeIntent(message: string): boolean {
+  return feeIntentKeywords.some((keyword) => message.includes(normalizeText(keyword)));
 }
 
 function includesOssuaryIntent(message: string): boolean {
@@ -109,6 +111,10 @@ export function answerChatMessage(message: string): string {
     return unknownAnswer;
   }
 
+  if (includesFeeIntent(normalizedMessage)) {
+    return feeInquiryAnswer;
+  }
+
   if (includesAnyBlockedKeyword(normalizedMessage)) {
     return unknownAnswer;
   }
@@ -139,4 +145,4 @@ export function answerChatMessage(message: string): string {
   return bestMatch?.answer ?? unknownAnswer;
 }
 
-export { ritualConsultationAnswer, unknownAnswer };
+export { feeInquiryAnswer, ritualConsultationAnswer, unknownAnswer };

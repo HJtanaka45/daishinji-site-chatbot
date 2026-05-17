@@ -12,6 +12,21 @@ export const unknownAnswer =
 export const ritualConsultationAnswer =
   "法要や供養のご相談については、内容や日時によって個別の確認が必要です。詳しくは大信寺へ直接お問い合わせください。";
 
+export const feeInquiryAnswer =
+  "費用については、墓苑・納骨方法・ご相談内容によって異なります。詳しい費用や条件については、大信寺へ直接お問い合わせください。";
+
+/** 費用・料金の問い合わせ意図（金額は案内せず問い合わせへ誘導） */
+export const feeIntentKeywords = [
+  "費用",
+  "料金",
+  "金額",
+  "価格",
+  "いくら",
+  "いくらですか",
+  "お金",
+  "支払い",
+];
+
 /** 法要・年忌などの相談意図（単独の「供養」は含めない） */
 export const ritualConsultationKeywords = [
   "法要",
