@@ -1,7 +1,11 @@
 import {
   daishinjiKnowledge,
+  type KnowledgeEntry,
+  ossuaryIntentKeywords,
+  ossuaryKnowledgeIds,
   ritualConsultationAnswer,
   ritualConsultationKeywords,
+  ritualConsultationPhrases,
   unknownAnswer,
 } from "./daishinjiKnowledge";
 
@@ -50,10 +54,38 @@ function includesAnyBlockedKeyword(message: string): boolean {
   return blockedKeywords.some((keyword) => message.includes(normalizeText(keyword)));
 }
 
+function includesOssuaryIntent(message: string): boolean {
+  return ossuaryIntentKeywords.some((keyword) => message.includes(normalizeText(keyword)));
+}
+
 function includesRitualConsultationIntent(message: string): boolean {
-  return ritualConsultationKeywords.some((keyword) =>
-    message.includes(normalizeText(keyword)),
-  );
+  if (includesOssuaryIntent(message)) {
+    return false;
+  }
+
+  if (
+    ritualConsultationKeywords.some((keyword) => message.includes(normalizeText(keyword)))
+  ) {
+    return true;
+  }
+
+  return ritualConsultationPhrases.some((phrase) => message.includes(normalizeText(phrase)));
+}
+
+function findBestKnowledgeMatch(
+  message: string,
+  entries: KnowledgeEntry[],
+): KnowledgeEntry | undefined {
+  return entries
+    .map((entry) => {
+      const score = entry.keywords.reduce((count, keyword) => {
+        return message.includes(normalizeText(keyword)) ? count + 1 : count;
+      }, 0);
+
+      return { entry, score };
+    })
+    .filter((candidate) => candidate.score >= minimumKeywordScore)
+    .sort((a, b) => b.score - a.score)[0]?.entry;
 }
 
 const locationIntentKeywords = [
@@ -81,6 +113,16 @@ export function answerChatMessage(message: string): string {
     return unknownAnswer;
   }
 
+  if (includesOssuaryIntent(normalizedMessage)) {
+    const ossuaryEntries = daishinjiKnowledge.filter((entry) =>
+      (ossuaryKnowledgeIds as readonly string[]).includes(entry.id),
+    );
+    const ossuaryMatch = findBestKnowledgeMatch(normalizedMessage, ossuaryEntries);
+    if (ossuaryMatch) {
+      return ossuaryMatch.answer;
+    }
+  }
+
   if (includesRitualConsultationIntent(normalizedMessage)) {
     return ritualConsultationAnswer;
   }
@@ -92,18 +134,9 @@ export function answerChatMessage(message: string): string {
     }
   }
 
-  const bestMatch = daishinjiKnowledge
-    .map((entry) => {
-      const score = entry.keywords.reduce((count, keyword) => {
-        return normalizedMessage.includes(normalizeText(keyword)) ? count + 1 : count;
-      }, 0);
+  const bestMatch = findBestKnowledgeMatch(normalizedMessage, daishinjiKnowledge);
 
-      return { entry, score };
-    })
-    .filter((candidate) => candidate.score >= minimumKeywordScore)
-    .sort((a, b) => b.score - a.score)[0];
-
-  return bestMatch?.entry.answer ?? unknownAnswer;
+  return bestMatch?.answer ?? unknownAnswer;
 }
 
 export { ritualConsultationAnswer, unknownAnswer };
